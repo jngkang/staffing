@@ -1,6 +1,7 @@
 /*==============================================================*/
+/*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2022/3/21 10:01:30                           */
+/* Created on:     2022/3/21 15:31:49                           */
 /*==============================================================*/
 
 
@@ -58,6 +59,8 @@ create table employee
    political            varchar(20) not null comment '政治面貌',
    address              varchar(255) not null comment '现住址',
    password             varchar(60) not null comment '密码',
+   state                tinyint not null comment '账号状态',
+   avatar_url           varchar(255) comment '头像地址',
    primary key (id),
    unique key uq_employee (empno, name, identifyNo)
 );
@@ -136,7 +139,7 @@ alter table sys_icon comment '图标表';
 create table sys_menu
 (
    menu_id              int not null auto_increment comment '菜单ID',
-   pid                  int not null comment '父级菜单id',
+   pid                  int comment '父级菜单id',
    name                 varchar(255) not null comment '菜单名称',
    path                 varchar(255) comment '菜单路径',
    page_path            varchar(255) comment '页面路径',

@@ -1,15 +1,14 @@
 <template>
     <el-card style="width: 35%; border: 1px solid #cccccc; padding: 20px; margin: auto; text-align: center;">
         <el-form :model="form" :rules="editFormRules" ref="editFormRef" label-width="80px">
-            <el-tooltip effect="dark" content="点击更换头像" placement="top"
-                        style="height: 40px"
-                        :enterable="false">
+            <el-tooltip effect="dark" content="点击更换头像" placement="top" :enterable="false">
                 <el-upload
                     class="avatar-uploader"
                     action="http://localhost:9090/files/upload"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess">
                     <img v-if="form.avatarUrl" :src="form.avatarUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-tooltip>
 
@@ -110,5 +109,16 @@ export default {
     height: 138px;
     display: block;
     border-radius: 50%;
+}
+
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 138px;
+    height: 138px;
+    line-height: 138px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px #8c939d dotted;
 }
 </style>

@@ -1,32 +1,36 @@
 <template>
     <div class="login_container">
-        <div class="login_bar">
-            <marquee behavior=alternate>~~~欢迎使用（系统名称）~~~</marquee>
-        </div>
-        <!-- 登陆块 -->
-        <div class="login_box">
-            <!--标题区域-->
-            <div class="login_title">
-                <span class="title1">系统名称</span>
-                <br>
-                <span class="title2">系统英文名称</span>
+        <!-- 表单验证 -->
+        <el-form ref="loginFormRef"
+                 :rules="loginRules"
+                 :model="loginForm">
+            <div class="login_box">
+                <!--标题区域-->
+                <div class="login_title">
+                    <span class="title1">大型企业员工信息管理系统</span>
+                    <br>
+                    <span class="title2">Large Enterprise Employee Information Management System</span>
+                </div>
+                <div style="width: 80%; height: 230px; margin: auto;" class="login_form">
+                    <div>
+                        <!-- 用户名 -->
+                        <el-input v-model="loginForm.username" prefix-icon="iconfont icondenglu"
+                                  style="margin-top: 25px"
+                        ></el-input>
+                    </div>
+                    <div>
+                        <!-- 密码 -->
+                        <el-input v-model="loginForm.password" prefix-icon="iconfont iconmima" type="password"
+                                  style="margin-bottom: 15px"
+                        ></el-input>
+                    </div>
+                    <div>
+                        <!-- 登录按钮 -->
+                        <el-button type="primary" @click="login()" style="width: 100%;">提交</el-button>
+                    </div>
+                </div>
             </div>
-            <!--表单区域-->
-            <el-form ref="loginFormRef" :rules="loginRules" :model="loginForm" class="login_form" label-width="0">
-                <!-- 用户名 -->
-                <el-form-item prop="username">
-                    <el-input v-model="loginForm.username" prefix-icon="iconfont icondenglu"></el-input>
-                </el-form-item>
-                <!-- 密码 -->
-                <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="iconfont iconmima" type="password"></el-input>
-                </el-form-item>
-                <!-- 按钮 -->
-                <el-form-item class="btns">
-                    <el-button type="primary" @click="login()" style="width: 300px">提交</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
+        </el-form>
     </div>
 </template>
 <script>
@@ -83,41 +87,31 @@ export default {
 </script>
 <style scoped>
 
-.login_bar {
-    height: 30px;
-    /*设置透明的背景色*/
-    background-color: rgba(255, 255, 255, 0.4);
-    font-size: 15px;
-    line-height: 2em;
-    border-radius: 20px;
-    width: 99%;
-    position: absolute;
-    left: 50%;
-    top: 1%;
-    transform: translate(-50%);
-}
-
 /*根节点样式*/
 .login_container {
-    /*background-image: url("src/assets/imgs/bg.jpg");*/
-    background-image: url("../assets/imgs/bg.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center; /* 背景图垂直、水平均居中 */
-    background-attachment: fixed;
-    /*background-color: #2b4b6b;*/
+    background-image: linear-gradient(to bottom right, #FC466B, #3F5EFB);
     height: 100%;
+    /* 设置登录窗口剧中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .login_box {
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 350px;
     background-color: #fff;
     border-radius: 20px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .login_title {
@@ -131,23 +125,4 @@ export default {
     font-weight: bold;
 }
 
-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: #eee;
-}
-
-.btns {
-    display: flex;
-    justify-content: center;
-}
-
-.login_form {
-    position: absolute;
-    bottom: 0%;
-    width: 100%;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
 </style>
