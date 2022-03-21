@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菱形</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #eeeeee;
+        }
+
+        input {
+            width: 100%;
+            height: 50px;
+            font-size: 36px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function change() {
+            let num = parseInt(document.getElementById("num").value)
+            let str = "";
+            // console.log(num);
+            if (num % 2 == 0) {
+                num++;
+            }
+            let no = 1;
+            let up = (num - 1) / 2 + 1;
+            // console.log(up);
+            for (let m = 0; m < up; m++) {
+                str += (no + "").padStart(2, "0");
+                str += "&emsp;&emsp;";
+                no++;
+                for (let i = m; i < up - 1; i++) {
+                    str += "&ensp;";
+                }
+                for (let j = 1; j <= 2 * m + 1; j++) {
+                    str += "*";
+                }
+                str += "<br/>";
+            }
+            let down = (num - 1) / 2;
+            // console.log(down);
+            for (let n = 0; n < down; n++) {
+                str += (no + "").padStart(2, "0");
+                str += "&emsp;&emsp;";
+                no++;
+                for (let i = 0; i <= n; i++) {
+                    str += "&ensp;";
+                }
+                for (let j = 2 * down - 1; j >= 2 * n + 1; j--) {
+                    str += "*";
+                }
+                str += "<br/>";
+            }
+            document.getElementById("text").innerHTML = str;
+        }
+    </script>
+</head>
+<body>
+<div>
+    <input type="text" placeholder="请输入数字" id="num" onchange="change()"></input>
+</div>
+<div style="height: 90vh; border: #eeeeee 1px solid">
+    <div id="text" style="margin-left: 20%; margin-top: 20px;">
+
+    </div>
+</div>
+</body>
+</html>
