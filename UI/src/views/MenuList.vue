@@ -147,15 +147,6 @@
 export default {
     name: "MenuList.vue",
     data() {
-        const isNum = (rule, value, callback) => {
-            const regNum = /^[0-9]*$/
-            if (value.match(regNum)) {
-                return true;
-            } else {
-                callback(new Error('请输入数字'))
-                return false;
-            }
-        };
         return {
             tableData: [],// 菜单信息列表
             // 新增子菜单窗口
@@ -173,14 +164,14 @@ export default {
             // 添加的表单验证
             addSubFormRules: {
                 name: [
-                    {required: true, message: "请输入菜单名", trigger: "blur"},
+                    {required: true, message: '请输入菜单名', trigger: 'blur'},
                 ],
                 icon: [
-                    {required: true, message: "请选择菜单图标", trigger: "blur"},
+                    {required: true, message: '请选择菜单图标', trigger: 'blur'},
                 ],
                 sortNum: [
-                    {required: true, message: "请输入菜单顺序", trigger: "blur"},
-                    {validator: isNum, trigger: 'blur'},
+                    {required: true, message: '请输入菜单顺序', trigger: 'blur'},
+                    {pattern: /^[0-9]*$/, message: '菜单顺序必须为数字值', trigger: 'blur'},
                 ],
             },
             addDialogVisible: false,// 对话框状态
@@ -196,14 +187,14 @@ export default {
             // 添加的表单验证
             addFormRules: {
                 name: [
-                    {required: true, message: "请输入菜单名", trigger: "blur"},
+                    {required: true, message: '请输入菜单名', trigger: 'blur'},
                 ],
                 icon: [
-                    {required: true, message: "请选择菜单图标", trigger: "blur"},
+                    {required: true, message: '请选择菜单图标', trigger: 'blur'},
                 ],
                 sortNum: [
-                    {required: true, message: "请输入菜单顺序", trigger: "blur"},
-                    {validator: isNum, trigger: 'blur'},
+                    {required: true, message: '请输入菜单顺序', trigger: 'blur'},
+                    {pattern: /^[0-9]*$/, message: '菜单顺序必须为数字值', trigger: 'blur'},
                 ],
             },
             // 修改菜单的信息
@@ -213,14 +204,14 @@ export default {
             // 修改的表单验证
             editFormRules: {
                 name: [
-                    {required: true, message: "请输入密码", trigger: "blur"},
+                    {required: true, message: '请输入密码', trigger: 'blur'},
                 ],
                 icon: [
-                    {required: true, message: "请选择菜单图标", trigger: "blur"},
+                    {required: true, message: '请选择菜单图标', trigger: 'blur'},
                 ],
                 sortNum: [
-                    {required: true, message: "请输入菜单顺序", trigger: "blur"},
-                    {validator: isNum, trigger: 'blur'},
+                    {required: true, message: '请输入菜单顺序', trigger: 'blur'},
+                    {pattern: /^[0-9]*$/, message: '菜单顺序必须为数字值', trigger: 'blur'},
                 ],
             },
             multipleSelection: [],
@@ -279,6 +270,7 @@ export default {
         },
         // 添加菜单方法
         addWindow() {
+            debugger
             this.$refs.addFormRef.validate(async valid => {
                 //验证不成功结束方法
                 if (!valid) return;

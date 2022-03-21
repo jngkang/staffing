@@ -32,15 +32,6 @@ import {setRoutes} from "@/router";
 export default {
     name: "Person",
     data() {
-        const isEmail = (rule, value, callback) => {
-            let regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-            if (value.match(regEmail)) {
-                return true;
-            } else {
-                callback(new Error('请输入正确的邮箱'))
-                return false;
-            }
-        }
         return {
             // 修改用户的信息
             form: {},
@@ -49,7 +40,7 @@ export default {
             editFormRules: {
                 email: [
                     {required: true, message: "请输入邮箱", trigger: "blur"},
-                    // {validator: isEmail, trigger: 'blur'},
+                    {type: 'email', message: "请输入正确的邮箱地址", trigger: "blur"},
                 ],
             },
             imageUrl: '',

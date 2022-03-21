@@ -166,33 +166,7 @@
 <script>
 export default {
     name: "UserList.vue",
-    // watch:{
-    //     editForm:{
-    //         handler(newvalue,oldvalue){
-    //             console.log("新",newvalue)
-    //             console.log("旧",oldvalue)
-    //             this.request.post("/user", newvalue).then(res => {
-    //                 console.log(res);
-    //                 if (!res.data) {
-    //                     return this.$message.error("修改失败");
-    //                 }
-    //                 this.$message.success("修改成功");
-    //                 this.editDialogVisible = false;
-    //                 this.tableLoad();
-    //             });
-    //         }
-    //     },
-    //     deep:true
-    // },
     data() {
-        const isEmail = (rule, value, callback) => {
-            const regEmail = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-            if (!value.match(regEmail)) {
-                callback(new Error('请输入正确的邮箱'));
-                return false;
-            }
-            return true;
-        };
         return {
             // 查询信息实体
             queryInfo: {
@@ -215,19 +189,19 @@ export default {
             // 添加的表单验证
             addFormRules: {
                 username: [
-                    {required: true, message: "请输入用户名", trigger: "blur"},
-                    {min: 3, max: 10, message: "长度在3到32个字符", trigger: "blur"},
+                    {required: true, message: '请输入用户名', trigger: 'blur'},
+                    {min: 3, max: 10, message: '长度在3到32个字符', trigger: 'blur'},
                 ],
                 password: [
-                    {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 3, max: 10, message: "长度在3到32个字符", trigger: "blur"},
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {min: 3, max: 10, message: '长度在3到32个字符', trigger: 'blur'},
                 ],
                 email: [
-                    {required: true, message: "请输入邮箱", trigger: "blur"},
-                    // {validator: isEmail, trigger: 'blur'},
+                    {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur'},
                 ],
                 role: [
-                    {required: true, message: "请选择角色", trigger: "blur"},
+                    {required: true, message: '请选择角色', trigger: 'blur'},
                 ],
             },
             // 修改用户的信息
@@ -237,15 +211,15 @@ export default {
             // 修改的表单验证
             editFormRules: {
                 password: [
-                    {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 3, max: 10, message: "长度在3到32个字符", trigger: "blur"},
+                    {required: true, message: '请输入密码', trigger: 'blur'},
+                    {min: 3, max: 10, message: '长度在3到32个字符', trigger: 'blur'},
                 ],
                 email: [
-                    {required: true, message: "请输入邮箱", trigger: "blur"},
-                    // {validator: isEmail, trigger: 'blur'},
+                    {required: true, message: '请输入邮箱', trigger: 'blur'},
+                    {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur'},
                 ],
                 role: [
-                    {required: true, message: "请选择角色", trigger: "blur"},
+                    {required: true, message: '请选择角色', trigger: 'blur'},
                 ],
             },
             multipleSelection: [],
@@ -260,8 +234,6 @@ export default {
     created() {
         this.roleInfoLoad();
         this.tableLoad();
-        console.log("sdsdsd",this.editFormRules.email)
-
     },
     methods: {
         tableLoad() {
@@ -390,12 +362,10 @@ export default {
         },
         // 编辑用户信息方法
         editUserInfo() {
-            console.log(this.editForm);
             this.$refs.editFormRef.validate(async valid => {
                 //验证不成功结束方法
                 if (!valid) return;
                 this.request.post("/user", this.editForm).then(res => {
-                    console.log(res);
                     if (!res.data) {
                         return this.$message.error("修改失败");
                     }
