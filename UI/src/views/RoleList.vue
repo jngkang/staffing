@@ -309,7 +309,6 @@ export default {
         },
         // 编辑角色权限信息方法
         authorityWindow() {
-            console.log(this.$refs.tree.getCheckedKeys());
             this.request.post("/role-menu/" + this.roleId, this.$refs.tree.getCheckedKeys()).then(res => {
                 if (res.code != 200) {
                     return this.$message.error("分配失败")

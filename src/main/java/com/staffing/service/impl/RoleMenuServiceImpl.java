@@ -45,7 +45,13 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
                 RoleMenu roleMenu = new RoleMenu();
                 roleMenu.setRoleId(roleId);
                 roleMenu.setMenuId(menu.getPid());
-                roleMenuMapper.insert(roleMenu);
+                QueryWrapper<RoleMenu> wrapper = new QueryWrapper<>();
+                wrapper.eq("role_id", roleId);
+                wrapper.eq("menu_id", menu.getPid());
+                RoleMenu one = roleMenuMapper.selectOne(wrapper);
+                if (one == null) {
+                    roleMenuMapper.insert(roleMenu);
+                }
             }
             // 若父级id已经添加则直接添加
             RoleMenu roleMenu = new RoleMenu();

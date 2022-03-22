@@ -338,7 +338,9 @@ export default {
                 }
             }
             this.request.post("/menu/del/batch", ids).then(res => {
-
+                if (res.code == "600") {
+                    return this.$message.error(res.msg);
+                }
                 if (!res.data) {
                     return this.$message.error("删除失败")
                 }

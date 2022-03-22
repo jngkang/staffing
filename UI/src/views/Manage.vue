@@ -33,14 +33,16 @@
             <el-container>
                 <el-menu class="el-menu-vertical-demo"
                          width="200px"
-                         :default-openeds="opens"
                          :collapse="isCollapse"
                          active-text-color="#409eff"
                          :collapse-transition="false"
                          background-color="#545c64"
-                         text-color="#ffffff" unique-opened router>
+                         text-color="#ffffff"
+                         :default-openeds="opens"
+                         router>
+<!--                    unique-opened 默认只打开一个菜单项-->
 
-                    <div style="font-size: 20px; text-align: center; color: #fff" @click="collapse">
+                    <div style="font-size: 20px; text-align: center; color: #fff;background-color: #434a50" @click="collapse">
                         <i class="el-icon-s-fold"></i>
                     </div>
 
@@ -52,7 +54,7 @@
                             </el-menu-item>
                         </div>
                         <div v-else>
-                            <el-submenu :index="''+item.id">
+                            <el-submenu :index="''+item.menuId">
                                 <template slot="title">
                                     <i :class="item.icon"></i>
                                     <span slot="title" v-show="logoTextShow">{{ item.name }}</span>
@@ -102,7 +104,7 @@
     line-height: 60px
 }
 
-.main_breadcrumb{
+.main_breadcrumb {
     flex: 1;
     font-size: 50px;
     margin-bottom: 18px;
@@ -135,8 +137,10 @@ export default {
         // 获取菜单数据
         this.menus = window.localStorage.getItem("menus") ? JSON.parse(window.localStorage.getItem("menus")) : {};
 
+
         // 设置所有菜单展开
-        this.opens = this.user.menus.map(v => v.id + '');
+        this.opens = this.user.menus.map(v => '' + v.menuId);
+        console.log(this.opens);
     },
     computed: {
         currentPathName() {
