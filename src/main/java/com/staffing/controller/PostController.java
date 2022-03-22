@@ -1,4 +1,4 @@
-package ${package.Controller};
+package com.staffing.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -10,48 +10,29 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
-import ${package.Service}.${table.serviceName};
-import ${package.Entity}.${entity};
+import com.staffing.service.IPostService;
+import com.staffing.entity.Post;
 
-#if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
-#else
-import org.springframework.stereotype.Controller;
-#end
-#if(${superControllerClassPackage})
-import ${superControllerClassPackage};
-#end
 
 /**
  * @author JngKang
- * @date ${date}
+ * @date 2022-03-22
  * @description
  */
-#if(${restControllerStyle})
 @RestController
-#else
-@Controller
-#end
-@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
-#if(${kotlin})
-class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
-
-#else
-    #if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
-    #else
-public class ${table.controllerName} {
-    #end
+@RequestMapping("/post")
+public class PostController {
 
     @Resource
-    private ${table.serviceName} ${table.entityPath}Service;
+    private IPostService postService;
 
     /**
      * 新增和修改数据
      */
     @PostMapping
-    public Result save(@RequestBody ${entity} ${table.entityPath}) {
-        return Result.success(${table.entityPath}Service.saveOrUpdate(${table.entityPath}));
+    public Result save(@RequestBody Post post) {
+        return Result.success(postService.saveOrUpdate(post));
     }
 
     /**
@@ -59,7 +40,7 @@ public class ${table.controllerName} {
      */
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Integer id) {
-        return Result.success(${table.entityPath}Service.removeById(id));
+        return Result.success(postService.removeById(id));
     }
 
     /**
@@ -67,7 +48,7 @@ public class ${table.controllerName} {
      */
     @PostMapping("/del/batch")
     public Result deleteBatch(@RequestBody List<Integer> ids) {
-        return Result.success(${table.entityPath}Service.removeByIds(ids));
+        return Result.success(postService.removeByIds(ids));
     }
 
     /**
@@ -75,7 +56,7 @@ public class ${table.controllerName} {
      */
     @GetMapping
     public Result findAll() {
-        return Result.success(${table.entityPath}Service.list());
+        return Result.success(postService.list());
     }
 
     /**
@@ -83,7 +64,7 @@ public class ${table.controllerName} {
      */
     @GetMapping("/{id}")
     public Result findOne(@PathVariable Integer id) {
-        return Result.success(${table.entityPath}Service.getById(id));
+        return Result.success(postService.getById(id));
     }
 
     /**
@@ -93,7 +74,7 @@ public class ${table.controllerName} {
     public Result findPage(@RequestParam Integer pageNum,
                                     @RequestParam Integer pageSize,
                                     @RequestParam String search) {
-        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
         if (!"".equals(search)) {
             // 检索条件
             // queryWrapper.like("username", search);// 若有多个and条件直接写多条此例
@@ -104,8 +85,7 @@ public class ${table.controllerName} {
 			//				.or().like("email", search)
 			//);
         }
-        return Result.success(${table.entityPath}Service.page(new Page<>(pageNum, pageSize), queryWrapper));
+        return Result.success(postService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 }
 
-#end

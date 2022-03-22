@@ -1,7 +1,6 @@
 /*==============================================================*/
-/*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2022/3/21 15:31:49                           */
+/* Created on:     2022/3/22 21:44:16                           */
 /*==============================================================*/
 
 
@@ -30,13 +29,12 @@ drop table if exists vacation;
 /*==============================================================*/
 create table department
 (
-   id                   int not null auto_increment comment '部门ID',
    deptno               varchar(6) not null comment '部门编号',
    name                 varchar(160) not null comment '部门名称',
    location             varchar(255) not null comment '部门地址',
    description          varchar(255) comment '描述',
-   primary key (id),
-   unique key uq_department (deptno, name)
+   primary key (deptno),
+   unique key up_name (name)
 );
 
 alter table department comment '部门表';
@@ -46,23 +44,24 @@ alter table department comment '部门表';
 /*==============================================================*/
 create table employee
 (
-   id                   int not null comment '员工ID',
+   empno                varchar(18) not null comment '员工编号',
    role_id              int not null comment '角色ID',
-   post_id              int not null comment '岗位ID',
-   dep_id               int not null comment '部门ID',
-   empno                varchar(12) not null comment '员工编号',
+   postno               varchar(6) not null comment '岗位编号',
+   deptno               varchar(6) not null comment '部门编号',
    name                 varchar(20) not null comment '姓名',
    sex                  tinyint not null comment '性别',
    identifyNo           varchar(18) not null comment '有效证件号',
    nation               varchar(10) not null comment '民族',
    province             varchar(60) not null comment '籍贯',
    political            varchar(20) not null comment '政治面貌',
+   phone                varchar(11) not null comment '手机号',
    address              varchar(255) not null comment '现住址',
    password             varchar(60) not null comment '密码',
    state                tinyint not null comment '账号状态',
    avatar_url           varchar(255) comment '头像地址',
-   primary key (id),
-   unique key uq_employee (empno, name, identifyNo)
+   primary key (empno),
+   unique key uq_name (name),
+   unique key uq_identifyNo (identifyNo)
 );
 
 alter table employee comment '员工表';
@@ -72,13 +71,12 @@ alter table employee comment '员工表';
 /*==============================================================*/
 create table post
 (
-   id                   int not null auto_increment comment '岗位ID',
-   dep_id               int not null comment '部门ID',
    postno               varchar(6) not null comment '岗位编号',
+   deptno               varchar(6) not null comment '部门编号',
    name                 varchar(20) not null comment '岗位名称',
    description          varchar(255) comment '描述',
-   primary key (id, dep_id),
-   unique key uq_post (name, postno)
+   primary key (postno, deptno),
+   unique key uq_name (name)
 );
 
 alter table post comment '岗位表';
@@ -88,7 +86,7 @@ alter table post comment '岗位表';
 /*==============================================================*/
 create table salary
 (
-   id                   int not null comment '员工ID',
+   empno                varchar(18) not null comment '员工编号',
    base                 float(10,2) not null comment '基本工资',
    performance          float(10,2) not null comment '绩效工资',
    bonus                float(10,2) not null comment '奖金',
@@ -98,7 +96,7 @@ create table salary
    absenteeism          float(10,2) not null comment '缺勤',
    fsalary              float(10,2) not null comment '实发工资',
    remark               varchar(255) comment '备注',
-   primary key (id)
+   primary key (empno)
 );
 
 alter table salary comment '工资表';
@@ -182,28 +180,28 @@ alter table sys_role_menu comment '角色菜单关系表';
 create table vacation
 (
    vatno                int not null auto_increment comment '总请假编号',
-   emp_id               int not null comment '员工ID',
+   empno                varchar(18) not null comment '员工编号',
    reason               varchar(255) not null comment '请假原因',
    inoutTime            datetime not null comment '申请日期',
    state                tinyint not null comment '状态',
-   mgr_id               int comment '员工ID',
+   check_empno          varchar(18) comment '员工编号',
    checkTime            datetime comment '审核日期',
    primary key (vatno)
 );
 
 alter table vacation comment '请假表';
 
-alter table employee add constraint FK_Reference_10 foreign key (post_id, dep_id)
-      references post (id, dep_id) on delete restrict on update restrict;
+alter table employee add constraint FK_Reference_11 foreign key (postno, deptno)
+      references post (postno, deptno) on delete restrict on update restrict;
 
 alter table employee add constraint FK_Reference_5 foreign key (role_id)
       references sys_role (role_id) on delete restrict on update restrict;
 
-alter table post add constraint FK_Reference_11 foreign key (dep_id)
-      references department (id) on delete restrict on update restrict;
+alter table post add constraint FK_Reference_10 foreign key (deptno)
+      references department (deptno) on delete restrict on update restrict;
 
-alter table salary add constraint FK_Reference_8 foreign key (id)
-      references employee (id) on delete restrict on update restrict;
+alter table salary add constraint FK_Reference_8 foreign key (empno)
+      references employee (empno) on delete restrict on update restrict;
 
 alter table sys_role_menu add constraint FK_Reference_1 foreign key (role_id)
       references sys_role (role_id) on delete restrict on update restrict;
@@ -211,9 +209,9 @@ alter table sys_role_menu add constraint FK_Reference_1 foreign key (role_id)
 alter table sys_role_menu add constraint FK_Reference_2 foreign key (menu_id)
       references sys_menu (menu_id) on delete restrict on update restrict;
 
-alter table vacation add constraint FK_Reference_7 foreign key (emp_id)
-      references employee (id) on delete restrict on update restrict;
+alter table vacation add constraint FK_Reference_7 foreign key (empno)
+      references employee (empno) on delete restrict on update restrict;
 
-alter table vacation add constraint FK_Reference_9 foreign key (mgr_id)
-      references employee (id) on delete restrict on update restrict;
+alter table vacation add constraint FK_Reference_9 foreign key (check_empno)
+      references employee (empno) on delete restrict on update restrict;
 

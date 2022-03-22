@@ -139,11 +139,15 @@ public class UserController {
                            @RequestParam String search,
                            @RequestParam String role) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(search)) {
-            queryWrapper.like("username", search);
-        }
         if (!"".equals(role)) {
-            queryWrapper.like("role", role);
+            queryWrapper.eq("role", role);
+        }
+        if (!"".equals(search)) {
+            queryWrapper.and(
+                    QueryWrapper -> QueryWrapper.like("username", search)
+                            .or().like("nickname", search)
+                            .or().like("email", search)
+            );
         }
         return Result.success(userService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
@@ -235,11 +239,16 @@ public class UserController {
         //通过工具类创建writer
         ExcelWriter writer = ExcelUtil.getWriter(true);
 
+        writer.setColumnWidth(0, 20);
+        writer.setColumnWidth(1, 20);
+        writer.setColumnWidth(2, 20);
+        writer.setColumnWidth(3, 20);
+
         writer.write(rows, true);
 
         // 设置浏览器响应的格式
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
-        String fileName = URLEncoder.encode("用户信息", "UTF-8");
+        String fileName = URLEncoder.encode("用户信息批量导入模板", "UTF-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
 
         ServletOutputStream out = response.getOutputStream();

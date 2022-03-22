@@ -68,7 +68,6 @@ export default {
                 this.request.post("/user/login", this.loginForm).then(res => {
                     if (res.code === '200') {
                         this.$message.success("登录成功");// 信息提示
-                        console.log(res.data);
                         window.localStorage.setItem("user", JSON.stringify(res.data));
                         window.localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储用户信息到浏览器
                         // window.sessionStorage.setItem("user", res.user);// 存储user对象

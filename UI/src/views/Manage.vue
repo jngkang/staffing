@@ -133,7 +133,6 @@ export default {
     created() {
         // 获取登录用户的信息
         this.user = window.localStorage.getItem("user") ? JSON.parse(window.localStorage.getItem("user")) : {};
-        console.log(this.user);
 
         // 获取菜单数据
         this.menus = window.localStorage.getItem("menus") ? JSON.parse(window.localStorage.getItem("menus")) : {};

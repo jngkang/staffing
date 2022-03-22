@@ -98,6 +98,11 @@ public class ${table.controllerName} {
             // 检索条件
             // queryWrapper.like("username", search);// 若有多个and条件直接写多条此例
             // queryWrapper.or().like("nickname", search);// 若存在or条件写此例
+			//queryWrapper.and( // 添加括号，并且以and连接
+			//		QueryWrapper -> QueryWrapper.like("username", search)
+			//				.or().like("nickname", search)
+			//				.or().like("email", search)
+			//);
         }
         return Result.success(${table.entityPath}Service.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
