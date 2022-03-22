@@ -56,7 +56,7 @@ public class MenuController {
         try {
             return Result.success(menuService.removeByIds(ids));
         } catch (Exception e) {
-            throw new ServiceException(Constants.CODE_600, "删除失败，请先删除角色与菜单的绑定再进行删除");
+            throw new ServiceException(Constants.CODE_600, "删除失败，请先在角色权限分配中删除与该菜单的相关绑定");
         }
     }
 

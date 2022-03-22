@@ -11,7 +11,7 @@
                             <img :src="user.avatarUrl" alt=""
                                  style="width: 40px;height: 40px; border-radius: 50%;position: relative;top: 10px;right: 5px">
                             <span style="position: relative;top: -5px">
-                                {{ user.username }}
+                                {{ user.nickname }}
                                 <i class="el-icon-arrow-down"></i>
                             </span>
                         </span>
@@ -40,7 +40,7 @@
                          text-color="#ffffff"
                          :default-openeds="opens"
                          router>
-<!--                    unique-opened 默认只打开一个菜单项-->
+                    <!--                    unique-opened 默认只打开一个菜单项-->
 
                     <div style="font-size: 20px; text-align: center; color: #fff;background-color: #434a50" @click="collapse">
                         <i class="el-icon-s-fold"></i>
@@ -133,6 +133,7 @@ export default {
     created() {
         // 获取登录用户的信息
         this.user = window.localStorage.getItem("user") ? JSON.parse(window.localStorage.getItem("user")) : {};
+        console.log(this.user);
 
         // 获取菜单数据
         this.menus = window.localStorage.getItem("menus") ? JSON.parse(window.localStorage.getItem("menus")) : {};
@@ -140,7 +141,6 @@ export default {
 
         // 设置所有菜单展开
         this.opens = this.user.menus.map(v => '' + v.menuId);
-        console.log(this.opens);
     },
     computed: {
         currentPathName() {

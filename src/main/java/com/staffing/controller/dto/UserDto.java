@@ -14,6 +14,7 @@ import java.util.List;
 public class UserDto {
     private String id;
     private String username;
+    private String nickname;
     private String password;
     private String avatarUrl;
     private String token;
