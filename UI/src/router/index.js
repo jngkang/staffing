@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 //引入Login组件
-import Login from '../views/Login.vue'
+import Login from '../components/Login.vue'
 import Manage from '../views/Manage.vue'
 
 import store from "@/store"
-import notFound from "../views/error.vue";
+import notFound from "../components/error.vue";
 
 Vue.use(VueRouter)
 
@@ -43,8 +43,8 @@ export const setRoutes = () => {
     if (storeMenus) {
         // 拼装动态路由
         const manageRoute = { path: '/', name: 'Manage', component: () => import('../views/Manage.vue'), redirect: "/home", children: [
-                { path: 'person', name: '个人信息', component: () => import('../views/Person.vue')},
-                { path: 'password', name: '修改密码', component: () => import('../views/Password.vue')},
+                { path: 'person', name: '个人信息', component: () => import('../components/Person.vue')},
+                { path: 'password', name: '修改密码', component: () => import('../components/Password.vue')},
             ] }
         const menus = JSON.parse(storeMenus)
         menus.forEach(item => {

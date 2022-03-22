@@ -1,7 +1,7 @@
 <template>
     <div class="login_container">
         <div>
-            <img src="../assets/imgs/404.jpg" width="659px" height="346px">
+            <img src="src/assets/imgs/404.jpg" width="659px" height="346px">
         </div>
         <div>
             <span>你所访问的页面不存在！<span v-on:click="goOff" style="color: blue;cursor:pointer;">点击这里</span>返回上一页</span>
