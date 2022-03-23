@@ -9,16 +9,10 @@
                     <el-button slot="append" icon="el-icon-search" @click="tableLoad"></el-button>
                 </el-input>
                 <template>
-                    <el-select v-model="queryInfo.role" filterable placeholder="角色类型"
-                               style="width: 10%;" class="ml-10"
+                    <el-select v-model="queryInfo.role" placeholder="请选择角色类型"
+                               style="width: 12%" class="ml-10"
                                @change="roleSelectChange">
-                        <el-option
-                            v-for="item in roleOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                            style="text-align: center;">
-                        </el-option>
+                        <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name"/>
                     </el-select>
                 </template>
                 <el-button @click="reset" class="el-icon-refresh ml-10"></el-button>
@@ -114,9 +108,7 @@
                     </el-form-item>
                     <el-form-item label="角色" prop="role">
                         <el-select clearable v-model="addForm.role" placeholder="请选择" style="width: 100%">
-                            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
-                                <i :class="item.name"/> {{ item.name }}
-                            </el-option>
+                            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email">
@@ -142,9 +134,7 @@
                     </el-form-item>
                     <el-form-item label="角色" prop="role">
                         <el-select clearable v-model="editForm.role" placeholder="请选择" style="width: 100%">
-                            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name">
-                                <i :class="item.name"/> {{ item.name }}
-                            </el-option>
+                            <el-option v-for="item in options" :key="item.name" :label="item.name" :value="item.name"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="邮箱" prop="email">
@@ -227,7 +217,7 @@ export default {
             options: [],
             roleOptions: [{
                 value: "",
-                label: "角色类型",
+                label: "请选择角色类型",
             }],
         }
     },
@@ -263,7 +253,7 @@ export default {
                 res.data.forEach(r => {
                     let temp = {};
                     temp.value = r.name;
-                    temp.label = r.name
+                    temp.label = r.name;
                     this.roleOptions.push(temp);
                 });
             });
@@ -299,7 +289,7 @@ export default {
             this.$refs.addFormRef.validate(async valid => {
                 //验证不成功结束方法
                 if (!valid) return;
-                this.request.post("user", this.addForm).then(res => {
+                this.request.post("/user", this.addForm).then(res => {
                     if (res.code == "600") {
                         return this.$message.error(res.msg);
                     }

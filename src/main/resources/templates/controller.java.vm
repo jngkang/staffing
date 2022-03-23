@@ -54,6 +54,14 @@ public class ${table.controllerName} {
         return Result.success(${table.entityPath}Service.saveOrUpdate(${table.entityPath}));
     }
 
+	/**
+	 * 新增数据
+	 */
+	@PostMapping("/insert")
+	public Result insert(@RequestBody Post post) {
+		return Result.success(postService.insert(post));
+	}
+
     /**
      * 根据id删除数据
      */

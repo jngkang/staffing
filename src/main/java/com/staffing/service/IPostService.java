@@ -10,4 +10,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPostService extends IService<Post> {
 
+    /**
+     * @param post 新增的数据
+     * @return boolean
+     * @description 添加数据
+     */
+    public boolean insert(Post post);
+
 }

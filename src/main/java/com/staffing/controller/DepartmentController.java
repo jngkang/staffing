@@ -51,15 +51,19 @@ public class DepartmentController {
     private IDepartmentService departmentService;
 
     /**
-     * 新增和修改数据
+     * 修改数据
      */
     @PostMapping
     public Result save(@RequestBody Department department) {
-        try {
-            return Result.success(departmentService.saveOrUpdate(department));
-        } catch (Exception e) {
-            throw new ServiceException(Constants.CODE_600, "添加失败，部门编号或部门名称重复。");
-        }
+        return Result.success(departmentService.saveOrUpdate(department));
+    }
+
+    /**
+     * 新增数据
+     */
+    @PostMapping("/insert")
+    public Result insert(@RequestBody Department department) {
+        return Result.success(departmentService.insert(department));
     }
 
     /**
@@ -192,7 +196,7 @@ public class DepartmentController {
         String attention = "注意：";
         String attention1 = "1、带*的为必填项。";
         String attention2 = "2、部门编号的长度：3 ≤ len ≤ 6。";
-        String attention3 = "3、部门编号和部门名称不可重复（包括已添加的数据）。";
+        String attention3 = "3、部门编号、部门名称均不可重复（与包括已添加的数据）。";
         writer.merge(0, 0, 0, 3, attention, true);
         writer.merge(1, 1, 0, 3, attention1, true);
         writer.merge(2, 2, 0, 3, attention2, true);

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2022/3/22 21:44:16                           */
+/* Created on:     2022/3/23 15:03:01                           */
 /*==============================================================*/
 
 
@@ -30,7 +30,7 @@ drop table if exists vacation;
 create table department
 (
    deptno               varchar(6) not null comment '部门编号',
-   name                 varchar(160) not null comment '部门名称',
+   name                 varchar(20) not null comment '部门名称',
    location             varchar(255) not null comment '部门地址',
    description          varchar(255) comment '描述',
    primary key (deptno),
@@ -47,7 +47,6 @@ create table employee
    empno                varchar(18) not null comment '员工编号',
    role_id              int not null comment '角色ID',
    postno               varchar(6) not null comment '岗位编号',
-   deptno               varchar(6) not null comment '部门编号',
    name                 varchar(20) not null comment '姓名',
    sex                  tinyint not null comment '性别',
    identifyNo           varchar(18) not null comment '有效证件号',
@@ -75,8 +74,8 @@ create table post
    deptno               varchar(6) not null comment '部门编号',
    name                 varchar(20) not null comment '岗位名称',
    description          varchar(255) comment '描述',
-   primary key (postno, deptno),
-   unique key uq_name (name)
+   primary key (postno),
+   unique key uq_name (name, deptno)
 );
 
 alter table post comment '岗位表';
@@ -191,8 +190,8 @@ create table vacation
 
 alter table vacation comment '请假表';
 
-alter table employee add constraint FK_Reference_11 foreign key (postno, deptno)
-      references post (postno, deptno) on delete restrict on update restrict;
+alter table employee add constraint FK_Reference_11 foreign key (postno)
+      references post (postno) on delete restrict on update restrict;
 
 alter table employee add constraint FK_Reference_5 foreign key (role_id)
       references sys_role (role_id) on delete restrict on update restrict;

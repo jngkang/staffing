@@ -1,10 +1,12 @@
 package com.staffing.entity;
 
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * @author JngKang
@@ -18,6 +20,7 @@ public class Post implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "postno")
     @ApiModelProperty("岗位编号")
     private String postno;
 
