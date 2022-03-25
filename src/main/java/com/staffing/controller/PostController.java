@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.staffing.common.Constants;
 import com.staffing.common.Result;
-import com.staffing.controller.dto.PostDto;
+import com.staffing.controller.dto.PostExportDto;
 import com.staffing.entity.Post;
 import com.staffing.exception.ServiceException;
 import com.staffing.service.IDepartmentService;
@@ -22,6 +22,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -144,12 +145,12 @@ public class PostController {
             list = postService.listByIds(ids);
         }
         // 根据从数据库中查询数的数据，将部门编号替换为部门名称
-        List<PostDto> listDto = new ArrayList<>();
+        List<PostExportDto> listDto = new ArrayList<>();
         for (Post post : list) {
-            PostDto postDto = new PostDto();
-            BeanUtil.copyProperties(post, postDto, true);
-            postDto.setDname(departmentService.getById(post.getDeptno()).getName());
-            listDto.add(postDto);
+            PostExportDto postExportDto = new PostExportDto();
+            BeanUtil.copyProperties(post, postExportDto, true);
+            postExportDto.setDname(departmentService.getById(post.getDeptno()).getName());
+            listDto.add(postExportDto);
         }
 
         // 通过工具类创建writer 写出到磁盘路径
@@ -280,6 +281,7 @@ public class PostController {
      * @author JngKang
      * @description 导入
      */
+    @Transactional
     @PostMapping("/import")
     public Result imp(@RequestParam MultipartFile file) throws IOException {
         InputStream inputStream = file.getInputStream();
@@ -292,21 +294,37 @@ public class PostController {
         List<Post> posts = CollUtil.newArrayList();
         for (List<Object> row : list) {
             Post post = new Post();
-            post.setPostno(row.get(0).toString());
+            try {
+                String postno = row.get(0).toString();
+                if (!(postno.length() >= 3 && postno.length() <= 6)) {
+                    throw new ServiceException();
+                }
+                post.setPostno(postno);
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，岗位编号长度在3到6个字符。");
+            }
             try {
                 post.setDeptno(departmentService.getDeptnoByName(row.get(1).toString()));
             } catch (Exception e) {
                 throw new ServiceException(Constants.CODE_600, "导入失败，部门不存在。");
             }
-            post.setName(row.get(2).toString());
+
+            try {
+                String name = row.get(2).toString();
+                if (!(name.length() >= 2 && name.length() <= 20)) {
+                    throw new ServiceException();
+                }
+                post.setName(name);
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，岗位名称长度在2到20个字符。");
+            }
             try {
                 post.setDescription(row.get(3).toString());
             } catch (Exception ignored) {
-                ;
+                post.setDescription("");
             }
             posts.add(post);
         }
-        // 将部门名称转换为部门编号
         try {
             postService.saveBatch(posts);
         } catch (Exception e) {

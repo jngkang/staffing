@@ -15,6 +15,13 @@ public interface IPostService extends IService<Post> {
      * @return boolean
      * @description 添加数据
      */
-    public boolean insert(Post post);
+    boolean insert(Post post);
+
+    /**
+     * @param name 岗位名称
+     * @return java.lang.String
+     * @description 根据岗位名称查询岗位编号
+     */
+    Post getPostByName(String name);
 
 }

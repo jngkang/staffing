@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -259,6 +260,7 @@ public class DepartmentController {
      * @author JngKang
      * @description 导入
      */
+    @Transactional
     @PostMapping("/import")
     public Result imp(@RequestParam MultipartFile file) throws IOException {
         InputStream inputStream = file.getInputStream();
@@ -271,13 +273,37 @@ public class DepartmentController {
         List<Department> depts = CollUtil.newArrayList();
         for (List<Object> row : list) {
             Department dept = new Department();
-            dept.setDeptno(row.get(0).toString());
-            dept.setName(row.get(1).toString());
-            dept.setLocation(row.get(2).toString());
+            try {
+                String deptno = row.get(0).toString();
+                if (!(deptno.length() >= 3 && deptno.length() <= 6)) {
+                    throw new ServiceException();
+                }
+                dept.setDeptno(deptno);
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门编号长度在3到6个字符。");
+            }
+            try {
+                String name = row.get(1).toString();
+                if (!(name.length() >= 2 && name.length() <= 160)) {
+                    throw new ServiceException();
+                }
+                dept.setName(name);
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门名称长度在2到20个字符。");
+            }
+            try {
+                String location = row.get(2).toString();
+                if (!(location.length() >= 2 && location.length() <= 255)) {
+                    throw new ServiceException();
+                }
+                dept.setLocation(location);
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门地址长度在2到255个字符。");
+            }
             try {
                 dept.setDescription(row.get(3).toString());
-            } catch (Exception ignored) {
-                ;
+            } catch (Exception e) {
+                dept.setDescription("");
             }
             depts.add(dept);
         }

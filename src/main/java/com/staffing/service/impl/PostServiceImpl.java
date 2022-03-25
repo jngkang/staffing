@@ -32,4 +32,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         }
         return save(post);
     }
+
+    @Override
+    public Post getPostByName(String name) {
+        QueryWrapper<Post> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("name", name);
+        Post one = getOne(queryWrapper);
+        if (one == null) {
+            throw new ServiceException(Constants.CODE_600, "岗位不存在。");
+        }
+        return one;
+    }
 }

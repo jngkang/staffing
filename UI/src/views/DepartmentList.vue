@@ -152,15 +152,15 @@ export default {
             addFormRules: {
                 deptno: [
                     {required: true, message: '请输入部门编号', trigger: 'blur'},
-                    {min: 3, max: 6, message: '长度在3到32个字符', trigger: 'blur'},
+                    {min: 3, max: 6, message: '长度在3到6个字符', trigger: 'blur'},
                 ],
                 name: [
                     {required: true, message: '请输入部门名称', trigger: 'blur'},
-                    {min: 2, max: 160, message: '长度在3到32个字符', trigger: 'blur'},
+                    {min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur'},
                 ],
                 location: [
                     {required: true, message: '请输入部门地址', trigger: 'blur'},
-                    {min: 2, max: 255, message: '请输入正确的邮箱地址', trigger: 'blur'},
+                    {min: 2, max: 255, message: '长度在2到255个字符', trigger: 'blur'},
                 ],
             },
             // 修改部门的信息
@@ -171,15 +171,15 @@ export default {
             editFormRules: {
                 deptno: [
                     {required: true, message: '请输入部门编号', trigger: 'blur'},
-                    {min: 3, max: 6, message: '长度在3到32个字符', trigger: 'blur'},
+                    {min: 3, max: 6, message: '长度在3到6个字符', trigger: 'blur'},
                 ],
                 name: [
                     {required: true, message: '请输入部门名称', trigger: 'blur'},
-                    {min: 2, max: 160, message: '长度在3到32个字符', trigger: 'blur'},
+                    {min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur'},
                 ],
                 location: [
                     {required: true, message: '请输入部门地址', trigger: 'blur'},
-                    {min: 2, max: 255, message: '请输入正确的邮箱地址', trigger: 'blur'},
+                    {min: 2, max: 255, message: '长度在2到255个字符', trigger: 'blur'},
                 ],
             },
             multipleSelection: [],

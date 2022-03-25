@@ -18,7 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class PostDto {
+public class PostExportDto {
     /**
      * 岗位编号
      */

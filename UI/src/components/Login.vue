@@ -66,6 +66,7 @@ export default {
                 // const {data: res} = await this.$http.post("/user/login", this.loginForm);// 访问后台---axios请求方式
                 // 访问后台
                 this.request.post("/user/login", this.loginForm).then(res => {
+                    console.log(res);
                     if (res.code === '200') {
                         this.$message.success("登录成功");// 信息提示
                         window.localStorage.setItem("user", JSON.stringify(res.data));

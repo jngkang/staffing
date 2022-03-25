@@ -9,5 +9,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @description
  */
 public interface IRoleService extends IService<Role> {
+    /**
+     * @param roleName 角色名称
+     * @return java.lang.Integer
+     * @description 根据角色名称查询角色id
+     */
+    public Integer getRoleIdByName(String roleName);
 
 }

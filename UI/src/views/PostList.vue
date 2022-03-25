@@ -186,7 +186,7 @@ export default {
                 ],
                 name: [
                     {required: true, message: '请输入岗位名称', trigger: 'blur'},
-                    {min: 2, max: 160, message: '长度在2到160个字符', trigger: 'blur'},
+                    {min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur'},
                 ],
             },
             // 修改岗位的信息
@@ -201,7 +201,7 @@ export default {
                 ],
                 name: [
                     {required: true, message: '请输入岗位名称', trigger: 'blur'},
-                    {min: 2, max: 160, message: '长度在2到160个字符', trigger: 'blur'},
+                    {min: 2, max: 20, message: '长度在2到20个字符', trigger: 'blur'},
                 ],
             },
             multipleSelection: [],

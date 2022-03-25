@@ -31,44 +31,45 @@
                 </el-dropdown>
             </el-header>
             <el-container>
-                <el-menu class="el-menu-vertical-demo"
-                         width="200px"
-                         :collapse="isCollapse"
-                         active-text-color="#409eff"
-                         :collapse-transition="false"
-                         background-color="#545c64"
-                         text-color="#ffffff"
-                         :default-openeds="opens"
-                         router>
-                    <!--                    unique-opened 默认只打开一个菜单项-->
+                <el-aside :width="isCollapse ?'64px':'200px'" style="background-color: #545c64; overflow-x: hidden;">
+                    <el-menu class="el-menu-vertical-demo"
+                             :collapse="isCollapse"
+                             active-text-color="#409eff"
+                             :collapse-transition="false"
+                             background-color="#545c64"
+                             text-color="#ffffff"
+                             :default-openeds="opens"
+                             router>
+                        <!--                    unique-opened 默认只打开一个菜单项-->
 
-                    <div style="font-size: 20px; text-align: center; color: #fff;background-color: #434a50" @click="collapse">
-                        <i class="el-icon-s-fold"></i>
-                    </div>
-
-                    <div v-for="item in menus" :key="item.id">
-                        <div v-if="item.path">
-                            <el-menu-item :index="item.path">
-                                <i :class="item.icon"></i>
-                                <span slot="title">{{ item.name }}</span>
-                            </el-menu-item>
+                        <div style="font-size: 20px; text-align: center; color: #fff;background-color: #434a50" @click="collapse">
+                            <i class="el-icon-s-fold"></i>
                         </div>
-                        <div v-else>
-                            <el-submenu :index="''+item.menuId">
-                                <template slot="title">
+
+                        <div v-for="item in menus" :key="item.id">
+                            <div v-if="item.path">
+                                <el-menu-item :index="item.path">
                                     <i :class="item.icon"></i>
-                                    <span slot="title" v-show="logoTextShow">{{ item.name }}</span>
-                                </template>
-                                <div v-for="subItem in item.children" :key="subItem.id">
-                                    <el-menu-item :index="subItem.path">
-                                        <i :class="subItem.icon"></i>
-                                        <span slot="title">{{ subItem.name }}</span>
-                                    </el-menu-item>
-                                </div>
-                            </el-submenu>
+                                    <span slot="title">{{ item.name }}</span>
+                                </el-menu-item>
+                            </div>
+                            <div v-else>
+                                <el-submenu :index="''+item.menuId">
+                                    <template slot="title">
+                                        <i :class="item.icon"></i>
+                                        <span slot="title" v-show="logoTextShow">{{ item.name }}</span>
+                                    </template>
+                                    <div v-for="subItem in item.children" :key="subItem.id">
+                                        <el-menu-item :index="subItem.path">
+                                            <i :class="subItem.icon"></i>
+                                            <span slot="title">{{ subItem.name }}</span>
+                                        </el-menu-item>
+                                    </div>
+                                </el-submenu>
+                            </div>
                         </div>
-                    </div>
-                </el-menu>
+                    </el-menu>
+                </el-aside>
                 <el-main>
                     <div class="main_breadcrumb">
                         <!-- 面包屑导航 -->
@@ -80,7 +81,6 @@
                     <!-- 当前页面的子路由会在router-view里展示 -->
                     <router-view @refreshUser="getUserInfo"></router-view>
                 </el-main>
-
             </el-container>
         </el-container>
     </div>
@@ -88,11 +88,12 @@
 
 <style>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
+    /*min-height: 400px;*/
+    /* 去除二级菜单中右侧会多出来一点的问题 */
     overflow-x: hidden;
-    /*box-shadow: rgb(0 21 41 / 35%) 0px 0px 6px; 添加左菜单栏阴影,效果不好*/
-
+    cursor: pointer;
+    border-right: none;
+    /*box-shadow: rgb(0 21 41 / 35%) 0px 0px 6px; !*添加左菜单栏阴影,效果不好*!*/
 }
 
 .title {
@@ -105,7 +106,6 @@
 }
 
 .main_breadcrumb {
-    flex: 1;
     font-size: 50px;
     margin-bottom: 18px;
 }
@@ -136,7 +136,6 @@ export default {
 
         // 获取菜单数据
         this.menus = window.localStorage.getItem("menus") ? JSON.parse(window.localStorage.getItem("menus")) : {};
-
 
         // 设置所有菜单展开
         this.opens = this.user.menus.map(v => '' + v.menuId);
