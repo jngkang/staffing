@@ -107,6 +107,30 @@ public class EmployeeController {
     }
 
     /**
+     * 查询员工总数
+     */
+    @GetMapping("/count")
+    public Result findCount() {
+        return Result.success(employeeService.count());
+    }
+
+    /**
+     * 查询每个部门员工总数
+     */
+    @GetMapping("/deptcount")
+    public Result findDeptCount() {
+        return Result.success(employeeService.getDeptCount());
+    }
+
+    /**
+     * 查询每个部门员工总数
+     */
+    @GetMapping("/postcount")
+    public Result findPostCount() {
+        return Result.success(employeeService.getPostCount());
+    }
+
+    /**
      * 根据id查询一条数据
      */
     @GetMapping("/{id}")

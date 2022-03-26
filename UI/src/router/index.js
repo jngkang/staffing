@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 //引入Login组件
-import Login from '../components/Login.vue'
+import Login from '../views/Login.vue'
 import Manage from '../views/Manage.vue'
 
 import store from "@/store"

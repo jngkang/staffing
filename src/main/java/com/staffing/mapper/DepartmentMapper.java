@@ -1,7 +1,7 @@
 package com.staffing.mapper;
 
-import com.staffing.entity.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.staffing.entity.Department;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

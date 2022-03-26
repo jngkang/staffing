@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.staffing.mapper.EmployeeMapper">
 
+    <select id="getDeptCount" resultType="com.staffing.controller.dto.CountDto">
+        select d.name name, count(e.deptno) value
+        from employee e,
+            department d
+        where e.deptno = d.deptno
+        group by d.name
+    </select>
+    <select id="getPostCount" resultType="com.staffing.controller.dto.CountDto">
+        select p.name name, count(e.postno) value
+        from employee e,
+            post p
+        where e.postno = p.postno
+        group by name
+    </select>
 </mapper>
