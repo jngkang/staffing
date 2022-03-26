@@ -2,6 +2,8 @@ package com.staffing.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.staffing.controller.dto.CountDto;
+import com.staffing.controller.dto.EmployeeDto;
+import com.staffing.controller.dto.EmployeePasswordDto;
 import com.staffing.entity.Employee;
 
 import java.util.List;
@@ -12,6 +14,20 @@ import java.util.List;
  * @description
  */
 public interface IEmployeeService extends IService<Employee> {
+
+    /**
+     * @param userDto 登录信息
+     * @return com.staffing.controller.dto.UserDto
+     * @description 登录验证
+     */
+    EmployeeDto login(EmployeeDto employeeDto);
+
+    /**
+     * @param userPasswordDTO 密码相关信息
+     * @return java.lang.Boolean
+     * @description 修改密码
+     */
+    Boolean updatePassword(EmployeePasswordDto employeePasswordDto);
 
     /**
      * @param employee 待插入的数据信息

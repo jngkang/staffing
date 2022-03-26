@@ -4,8 +4,8 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.staffing.entity.User;
-import com.staffing.service.IUserService;
+import com.staffing.entity.Employee;
+import com.staffing.service.IEmployeeService;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -21,14 +21,14 @@ import java.util.Date;
  */
 public class TokenUtils {
 
-    private static IUserService staticUserService;
+    private static IEmployeeService staticEmployeeService;
 
     @Resource
-    private IUserService userService;
+    private IEmployeeService employeeService;
 
     @PostConstruct
     public void setUserService() {
-        staticUserService = userService;
+        staticEmployeeService = employeeService;
     }
 
     public static String genToken(String userId, String sign) {
@@ -45,13 +45,13 @@ public class TokenUtils {
      * @author JngKang
      * @description 获取当前登录的用户信息
      */
-    public static User getCurrentUser() {
+    public static Employee getCurrentUser() {
         try {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String token = request.getHeader(("token"));
             if (StrUtil.isNotBlank(token)) {
                 String userId = JWT.decode(token).getAudience().get(0);
-                return staticUserService.getById(Integer.valueOf(userId));
+                return staticEmployeeService.getById(Integer.valueOf(userId));
             }
         } catch (Exception e) {
             return null;

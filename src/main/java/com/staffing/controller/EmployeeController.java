@@ -3,6 +3,7 @@ package com.staffing.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -10,7 +11,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.staffing.common.Constants;
 import com.staffing.common.Result;
+import com.staffing.controller.dto.EmployeeDto;
 import com.staffing.controller.dto.EmployeeExportDto;
+import com.staffing.controller.dto.EmployeePasswordDto;
 import com.staffing.entity.Employee;
 import com.staffing.entity.Post;
 import com.staffing.exception.ServiceException;
@@ -173,6 +176,19 @@ public class EmployeeController {
             );
         }
         return Result.success(employeeService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody EmployeeDto employeeDto) {
+        if (StrUtil.isBlank(employeeDto.getEmpno()) || StrUtil.isBlank(employeeDto.getPassword())) {
+            return Result.error(Constants.CODE_400, "参数错误");
+        }
+        return Result.success(employeeService.login(employeeDto));
+    }
+
+    @PostMapping("/password")
+    public Result password(@RequestBody EmployeePasswordDto employeePasswordDto) {
+        return Result.success(employeeService.updatePassword(employeePasswordDto));
     }
 
     /**

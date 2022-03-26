@@ -11,7 +11,7 @@
                             <img :src="user.avatarUrl" alt=""
                                  style="width: 40px;height: 40px; border-radius: 50%;position: relative;top: 10px;right: 5px">
                             <span style="position: relative;top: -5px">
-                                {{ user.nickname }}
+                                {{ user.name }}
                                 <i class="el-icon-arrow-down"></i>
                             </span>
                         </span>
@@ -86,32 +86,6 @@
     </div>
 </template>
 
-<style>
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-    /*min-height: 400px;*/
-    /* 去除二级菜单中右侧会多出来一点的问题 */
-    overflow-x: hidden;
-    cursor: pointer;
-    border-right: none;
-    /*box-shadow: rgb(0 21 41 / 35%) 0px 0px 6px; !*添加左菜单栏阴影,效果不好*!*/
-}
-
-.title {
-    font-size: 36px;
-    font-family: 华文楷体;
-    font-weight: bold;
-    color: white;
-    margin-left: 5px;
-    line-height: 60px
-}
-
-.main_breadcrumb {
-    font-size: 50px;
-    margin-bottom: 18px;
-}
-
-</style>
-
 <script>
 import {setRoutes} from "@/router";
 
@@ -156,7 +130,7 @@ export default {
         getUserInfo() {
             // 从后台获取数据
             if (this.user) {
-                this.request.get("/user/username/" + this.user.username).then(res => {
+                this.request.get("/employee/" + this.user.empno).then(res => {
                     this.user = res.data;
                 });
             }
@@ -184,3 +158,29 @@ export default {
     }
 }
 </script>
+
+<style>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+    /*min-height: 400px;*/
+    /* 去除二级菜单中右侧会多出来一点的问题 */
+    overflow-x: hidden;
+    cursor: pointer;
+    border-right: none;
+    /*box-shadow: rgb(0 21 41 / 35%) 0px 0px 6px; !*添加左菜单栏阴影,效果不好*!*/
+}
+
+.title {
+    font-size: 36px;
+    font-family: 华文楷体;
+    font-weight: bold;
+    color: white;
+    margin-left: 5px;
+    line-height: 60px
+}
+
+.main_breadcrumb {
+    font-size: 50px;
+    margin-bottom: 18px;
+}
+
+</style>

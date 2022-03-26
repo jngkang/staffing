@@ -14,7 +14,7 @@
                 <div style="width: 80%; height: 230px; margin: auto;" class="login_form">
                     <div>
                         <!-- 用户名 -->
-                        <el-input v-model="loginForm.username" prefix-icon="iconfont icondenglu"
+                        <el-input v-model="loginForm.empno" prefix-icon="iconfont icondenglu"
                                   style="margin-top: 25px"
                         ></el-input>
                     </div>
@@ -40,19 +40,19 @@ export default {
     data() {
         return {
             loginForm: {
-                username: "admin",
+                empno: "123456",
                 password: "123456",
             },
             loginRules: {
                 // 校验用户名
-                username: [
+                empno: [
                     {required: true, message: '请输入用户名', trigger: 'blur'},// 必填项验证
-                    {min: 3, max: 10, message: "长度在3到10个字符", trigger: "blur"},
+                    {min: 6, max: 18, message: "长度在3到10个字符", trigger: "blur"},
                 ],
                 // 校验密码
                 password: [
                     {required: true, message: '请输入用户名密码', trigger: 'blur'},// 必填项验证
-                    {min: 3, max: 10, message: "长度在3到10个字符", trigger: "blur"},
+                    {min: 6, max: 60, message: "长度在3到10个字符", trigger: "blur"},
                 ]
             },
         }
@@ -63,15 +63,12 @@ export default {
             // 1、验证校验规则
             this.$refs.loginFormRef.validate(async valid => {
                 if (!valid) return;// 验证失败
-                // const {data: res} = await this.$http.post("/user/login", this.loginForm);// 访问后台---axios请求方式
                 // 访问后台
-                this.request.post("/user/login", this.loginForm).then(res => {
-                    console.log(res);
+                this.request.post("/employee/login", this.loginForm).then(res => {
                     if (res.code === '200') {
                         this.$message.success("登录成功");// 信息提示
                         window.localStorage.setItem("user", JSON.stringify(res.data));
                         window.localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储用户信息到浏览器
-                        // window.sessionStorage.setItem("user", res.user);// 存储user对象
 
                         // 动态设置当前用户的路由
                         setRoutes();
