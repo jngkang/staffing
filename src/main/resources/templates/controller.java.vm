@@ -58,8 +58,8 @@ public class ${table.controllerName} {
 	 * 新增数据
 	 */
 	@PostMapping("/insert")
-	public Result insert(@RequestBody Post post) {
-		return Result.success(postService.insert(post));
+	public Result insert(@RequestBody ${entity} ${table.entityPath}) {
+		return Result.success(${table.entityPath}Service.insert(${table.entityPath}));
 	}
 
     /**

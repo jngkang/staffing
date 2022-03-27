@@ -14,13 +14,13 @@
                 <div style="width: 80%; height: 230px; margin: auto;" class="login_form">
                     <div>
                         <!-- 用户名 -->
-                        <el-input v-model="loginForm.empno" prefix-icon="iconfont icondenglu"
+                        <el-input v-model="loginForm.empno" prefix-icon="iconfont icon-yonghu"
                                   style="margin-top: 25px"
                         ></el-input>
                     </div>
                     <div>
                         <!-- 密码 -->
-                        <el-input v-model="loginForm.password" prefix-icon="iconfont iconmima" type="password"
+                        <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" type="password"
                                   style="margin-bottom: 15px"
                         ></el-input>
                     </div>

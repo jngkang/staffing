@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.staffing.common.Constants;
 import com.staffing.controller.dto.CountDto;
 import com.staffing.controller.dto.EmployeeDto;
+import com.staffing.controller.dto.EmployeeNameInfoDto;
 import com.staffing.controller.dto.EmployeePasswordDto;
 import com.staffing.entity.Employee;
 import com.staffing.entity.Menu;
@@ -138,5 +139,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     @Override
     public List<CountDto> getPostCount() {
         return employeeMapper.getPostCount();
+    }
+
+    @Override
+    public List<EmployeeNameInfoDto> findAllNameInfoByEmpno(String empno) {
+        return employeeMapper.findAllNameInfoByEmpno(empno);
     }
 }

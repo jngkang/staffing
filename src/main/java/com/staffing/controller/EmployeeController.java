@@ -142,6 +142,14 @@ public class EmployeeController {
     }
 
     /**
+     * 根据员工编号，查询所有员工姓名、角色id、角色姓名、部门编号、部门名称、岗位编号、岗位名称
+     */
+    @GetMapping("/allnameinfo")
+    public Result findAllNameInfoByEmpno(@RequestParam String empno) {
+        return Result.success(employeeService.findAllNameInfoByEmpno(empno));
+    }
+
+    /**
      * 分页查询和搜索
      */
     @GetMapping("/page")

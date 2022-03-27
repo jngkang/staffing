@@ -16,4 +16,26 @@
         where e.postno = p.postno
         group by name
     </select>
+    <select id="findAllNameInfoByEmpno" resultType="com.staffing.controller.dto.EmployeeNameInfoDto">
+        select e.empno   empno,
+               e.name    empName,
+               e.role_id roleId,
+               r.name    roleName,
+               e.deptno  deptno,
+               d.name    deptName,
+               e.postno  postno,
+               p.name    postName
+        from employee e,
+             sys_role r,
+             department d,
+             post p
+        <where>
+            and e.role_id = r.role_id
+            and e.deptno = d.deptno
+            and e.postno = p.postno
+            <if test="empno != null and empno != ''">
+                and e.empno = #{empno}
+            </if>
+        </where>
+    </select>
 </mapper>
