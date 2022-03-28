@@ -1,5 +1,6 @@
 import axios from 'axios'
 import ElementUI from 'element-ui';
+import router, {resetRouter} from "@/router";
 
 const request = axios.create({
     baseURL: 'http://localhost:9090',
@@ -15,7 +16,6 @@ request.interceptors.request.use(config => {
     if (user) {
         config.headers['token'] = user.token;  // 设置请求头
     }
-
     return config
 }, error => {
     return Promise.reject(error)
@@ -40,6 +40,9 @@ request.interceptors.response.use(
                 message: res.msg,
                 type: 'error'
             });
+            router.push("/login");// 回到首页
+            window.localStorage.clear();// 清除session信息
+            resetRouter();// 重置路由
         }
         return res;
     },

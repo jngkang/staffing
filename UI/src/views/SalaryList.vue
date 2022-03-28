@@ -546,7 +546,6 @@ export default {
         formatDateTime(row, column) {
             // 获取单元格数据
             let date = row[column.property]
-            console.log(date);
             if (date == null) {
                 return null
             }
@@ -649,21 +648,18 @@ export default {
         },
         // 显示对编辑话框
         showEditDialog(id) {
-            this.request.get("/employee/allnameinfo").then(res => {
-                this.employeeOptions = res.data;
-            });
             this.request.get("/salary/" + id).then(res => {
                 this.editForm = res.data;// 查询出工资信息，并反填回编辑表单中
-                this.employeeOptions.forEach(r => {
-                    if (this.editForm.empno == r.empno) {
-                        this.$set(this.editForm, "roleName", r.roleName);
-                        this.$set(this.editForm, "deptName", r.deptName);
-                        this.$set(this.editForm, "postName", r.postName);
-                    }
+                this.request.get("/employee/allnameinfo/" + res.data.empno).then(res => {
+                    this.employeeOptions = res.data;
+                    this.$set(this.editForm, "roleName", res.data[0].roleName);
+                    this.$set(this.editForm, "deptName", res.data[0].deptName);
+                    this.$set(this.editForm, "postName", res.data[0].postName);
+                    console.log(res.data);
                 });
                 this.editDialogVisible = true;// 开启编辑窗口
+                console.log(this.editForm);
             });
-
         },
         // 关闭编辑对话框
         editDialogClosed() {
@@ -671,13 +667,12 @@ export default {
         },
         // 编辑工资信息方法
         editInfo() {
-
             this.$refs.editFormRef.validate(async valid => {
                 //验证不成功结束方法
                 if (!valid) return;
-                this.editForm.fsalary = this.editForm.base + this.editForm.performance + this.editForm.bonus
-                    + this.editForm.subsidy + this.editForm.insurance
-                    + this.editForm.penalty + this.editForm.absenteeism;
+                this.editForm.fsalary = Number(this.editForm.base) + Number(this.editForm.performance) + Number(this.editForm.bonus)
+                    + Number(this.editForm.subsidy) + Number(this.editForm.insurance)
+                    + Number(this.editForm.penalty) + Number(this.editForm.absenteeism);
                 this.request.post("/salary", this.editForm).then(res => {
                     if (res.code == "600") {
                         return this.$message.error(res.msg);

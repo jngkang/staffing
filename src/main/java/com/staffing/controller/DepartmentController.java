@@ -276,29 +276,29 @@ public class DepartmentController {
             try {
                 String deptno = row.get(0).toString();
                 if (!(deptno.length() >= 3 && deptno.length() <= 6)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，部门编号长度在3到6个字符。");
                 }
                 dept.setDeptno(deptno);
             } catch (Exception e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，部门编号长度在3到6个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门编号不能为空。");
             }
             try {
                 String name = row.get(1).toString();
                 if (!(name.length() >= 2 && name.length() <= 160)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，部门名称长度在2到20个字符。");
                 }
                 dept.setName(name);
             } catch (Exception e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，部门名称长度在2到20个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门名称不能为空。");
             }
             try {
                 String location = row.get(2).toString();
                 if (!(location.length() >= 2 && location.length() <= 255)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，部门地址长度在2到255个字符。");
                 }
                 dept.setLocation(location);
             } catch (Exception e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，部门地址长度在2到255个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，部门地址不能为空。");
             }
             try {
                 dept.setDescription(row.get(3).toString());

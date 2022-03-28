@@ -91,9 +91,9 @@ public class SalaryController {
     /**
      * 根据id查询一条数据
      */
-    @GetMapping("/{id}")
-    public Result findOne(@PathVariable String id) {
-        return Result.success(salaryService.getById(id));
+    @GetMapping("/{empno}")
+    public Result findOne(@PathVariable String empno) {
+        return Result.success(salaryService.getById(empno));
     }
 
     /**

@@ -297,11 +297,11 @@ public class PostController {
             try {
                 String postno = row.get(0).toString();
                 if (!(postno.length() >= 3 && postno.length() <= 6)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，岗位编号长度在3到6个字符。");
                 }
                 post.setPostno(postno);
             } catch (Exception e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，岗位编号长度在3到6个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，岗位编号不能为空。");
             }
             try {
                 post.setDeptno(departmentService.getDeptnoByName(row.get(1).toString()));
@@ -312,7 +312,7 @@ public class PostController {
             try {
                 String name = row.get(2).toString();
                 if (!(name.length() >= 2 && name.length() <= 20)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，岗位名称不能为空。");
                 }
                 post.setName(name);
             } catch (Exception e) {

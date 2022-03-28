@@ -144,8 +144,8 @@ public class EmployeeController {
     /**
      * 根据员工编号，查询所有员工姓名、角色id、角色姓名、部门编号、部门名称、岗位编号、岗位名称
      */
-    @GetMapping("/allnameinfo")
-    public Result findAllNameInfoByEmpno(@RequestParam String empno) {
+    @GetMapping("/allnameinfo/{empno}")
+    public Result findAllNameInfoByEmpno(@PathVariable String empno) {
         return Result.success(employeeService.findAllNameInfoByEmpno(empno));
     }
 
@@ -153,13 +153,7 @@ public class EmployeeController {
      * 分页查询和搜索
      */
     @GetMapping("/page")
-    public Result findPage(@RequestParam Integer pageNum,
-                           @RequestParam Integer pageSize,
-                           @RequestParam String sex,
-                           @RequestParam String roleId,
-                           @RequestParam String deptno,
-                           @RequestParam String postno,
-                           @RequestParam String search) {
+    public Result findPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String sex, @RequestParam String roleId, @RequestParam String deptno, @RequestParam String postno, @RequestParam String search) {
         QueryWrapper<Employee> queryWrapper = new QueryWrapper<>();
         if (!"".equals(sex)) {
             queryWrapper.like("sex", sex);
@@ -175,13 +169,7 @@ public class EmployeeController {
         }
         if (!"".equals(search)) {
             // 添加括号，并且以and连接
-            queryWrapper.and(
-                    QueryWrapper -> QueryWrapper.like("empno", search)
-                            .or().like("name", search)
-                            .or().like("phone", search)
-                            .or().like("identify_no", search)
-                            .or().like("address", search)
-            );
+            queryWrapper.and(QueryWrapper -> QueryWrapper.like("empno", search).or().like("name", search).or().like("phone", search).or().like("identify_no", search).or().like("address", search));
         }
         return Result.success(employeeService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
@@ -392,20 +380,20 @@ public class EmployeeController {
             try {
                 String empno = row.get(0).toString();
                 if (!(empno.length() >= 3 && empno.length() <= 18)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，员工编号长度在3到18个字符。");
                 }
                 employee.setEmpno(empno);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，员工编号长度在3到18个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，员工编号不能为空。");
             }
             try {
                 String name = row.get(1).toString();
                 if (!(name.length() >= 3 && name.length() <= 18)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，员工姓名长度在3到20个字符。");
                 }
                 employee.setName(name);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，员工姓名长度在3到20个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，员工姓名不能为空。");
             }
             try {
                 employee.setRoleId(roleService.getRoleIdByName(row.get(2).toString()));
@@ -421,75 +409,75 @@ public class EmployeeController {
             try {
                 Post post = postService.getPostByName(row.get(4).toString());
                 if (!(post.getDeptno().equals(employee.getDeptno()))) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，岗位不存在。");
                 }
                 employee.setPostno(post.getPostno());
             } catch (Exception e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，岗位不存在。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，岗位不能为空。");
             }
             try {
                 String sex = row.get(5).toString();
                 if (!("男".equals(sex)) || "女".equals(sex)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，性别输入有误。");
                 }
                 employee.setSex(sex.equals("男") ? true : false);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，性别输入有误。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，性别不能为空。");
             }
             try {
                 String nation = row.get(6).toString();
                 if (!(nation.length() >= 1 && nation.length() <= 10)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，民族长度在1到10个字符。");
                 }
                 employee.setNation(nation);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，民族长度在1到10个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，民族不能为空。");
             }
             try {
                 String province = row.get(7).toString();
                 if (!(province.length() >= 2 && province.length() <= 60)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，籍贯长度在1到10个字符。");
                 }
                 employee.setProvince(province);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，籍贯长度在1到10个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，籍贯不能为空。");
             }
             try {
                 String political = row.get(8).toString();
                 if (!(political.length() >= 2 && political.length() <= 20)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，政治面貌长度在1到10个字符。");
                 }
                 employee.setPolitical(political);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，政治面貌长度在1到10个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，政治面貌不能为空。");
             }
             try {
                 String phone = row.get(9).toString();
                 String telReg = "1[356789]\\d{9}$";
                 if (!phone.matches(telReg)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，手机号格式错误。");
                 }
                 employee.setPhone(phone);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，手机号格式错误。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，手机号不能为空。");
             }
             try {
                 String identifyNo = row.get(10).toString();
                 if (identifyNo.length() != 18) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，证件号输入有误。");
                 }
                 employee.setIdentifyNo(identifyNo);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，证件号输入有误。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，证件号不能为空。");
             }
             try {
                 String password = row.get(11).toString();
                 if (!(password.length() >= 6 && password.length() <= 60)) {
-                    throw new ServiceException();
+                    throw new ServiceException(Constants.CODE_600, "导入失败，密码长度在6到60个字符。");
                 }
                 employee.setPassword(password);
             } catch (ServiceException e) {
-                throw new ServiceException(Constants.CODE_600, "导入失败，密码长度在6到60个字符。");
+                throw new ServiceException(Constants.CODE_600, "导入失败，密码不能为空。");
             }
             employee.setState(false);
             // 地址为非必填项
