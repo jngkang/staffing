@@ -2,11 +2,16 @@ package com.staffing.controller;
 
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import com.staffing.common.Constants;
 import com.staffing.common.Result;
 import com.staffing.controller.dto.SalaryExportDto;
+import com.staffing.entity.Employee;
 import com.staffing.entity.Salary;
+import com.staffing.exception.ServiceException;
 import com.staffing.service.IEmployeeService;
 import com.staffing.service.ISalaryService;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -16,6 +21,7 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,10 +30,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,11 +100,7 @@ public class SalaryController {
      * 查询数据的总数
      */
     @GetMapping("/count")
-    public Result count(@RequestParam String payDate,
-                        @RequestParam String roleId,
-                        @RequestParam String deptno,
-                        @RequestParam String postno,
-                        @RequestParam String search) {
+    public Result count(@RequestParam String payDate, @RequestParam String roleId, @RequestParam String deptno, @RequestParam String postno, @RequestParam String search) {
         return Result.success(salaryService.count(payDate, roleId, deptno, postno, search));
     }
 
@@ -111,13 +116,7 @@ public class SalaryController {
      * 分页查询和搜索
      */
     @GetMapping("/page")
-    public Result findPage(@RequestParam Integer pageNum,
-                           @RequestParam Integer pageSize,
-                           @RequestParam String payDate,
-                           @RequestParam String roleId,
-                           @RequestParam String deptno,
-                           @RequestParam String postno,
-                           @RequestParam String search) {
+    public Result findPage(@RequestParam Integer pageNum, @RequestParam Integer pageSize, @RequestParam String payDate, @RequestParam String roleId, @RequestParam String deptno, @RequestParam String postno, @RequestParam String search) {
         return Result.success(salaryService.page(pageNum, pageSize, payDate, roleId, deptno, postno, search));
     }
 
@@ -214,7 +213,8 @@ public class SalaryController {
         ExcelWriter writer = ExcelUtil.getWriter(true);
 
         //设置列宽
-        for (int i = 0; i < 9; i++) {
+        writer.setColumnWidth(0, 25);
+        for (int i = 1; i < 9; i++) {
             writer.setColumnWidth(i, 15);
         }
         writer.setColumnWidth(9, 40);
@@ -231,7 +231,7 @@ public class SalaryController {
         writer.merge(1, 1, 0, 9, attention1, true);
         writer.merge(2, 2, 0, 9, attention2, true);
         writer.merge(3, 3, 0, 9, attention3, true);
-        writer.writeCellValue(0, 4, "*发放日期");
+        writer.writeCellValue(0, 4, "*发放日期(例:2020-03)");
         writer.writeCellValue(1, 4, "*员工编号");
         writer.writeCellValue(2, 4, "*基本工资");
         writer.writeCellValue(3, 4, "*绩效工资(￥)");
@@ -297,56 +297,94 @@ public class SalaryController {
      * @author JngKang
      * @description 导入
      */
-//    @Transactional
-//    @PostMapping("/import")
-//    public Result imp(@RequestParam MultipartFile file) throws IOException {
-//        InputStream inputStream = file.getInputStream();
-//        ExcelReader reader = ExcelUtil.getReader(inputStream);
-//        // 方式1：(推荐) 通过 javabean的方式读取Excel内的对象，但是要求表头必须是英文，跟javabean的属性要对应起来
-////        List<User> list = reader.readAll(User.class);
-//
-//        // 方式2：忽略表头的中文，直接读取表的内容
-//        List<List<Object>> list = reader.read(5);
-//        List<Post> posts = CollUtil.newArrayList();
-//        for (List<Object> row : list) {
-//            Post post = new Post();
-//            try {
-//                String postno = row.get(0).toString();
-//                if (!(postno.length() >= 3 && postno.length() <= 6)) {
-//                    throw new ServiceException();
-//                }
-//                post.setPostno(postno);
-//            } catch (Exception e) {
-//                throw new ServiceException(Constants.CODE_600, "导入失败，岗位编号长度在3到6个字符。");
-//            }
-//            try {
-//                post.setDeptno(departmentService.getDeptnoByName(row.get(1).toString()));
-//            } catch (Exception e) {
-//                throw new ServiceException(Constants.CODE_600, "导入失败，部门不存在。");
-//            }
-//
-//            try {
-//                String name = row.get(2).toString();
-//                if (!(name.length() >= 2 && name.length() <= 20)) {
-//                    throw new ServiceException();
-//                }
-//                post.setName(name);
-//            } catch (Exception e) {
-//                throw new ServiceException(Constants.CODE_600, "导入失败，岗位名称长度在2到20个字符。");
-//            }
-//            try {
-//                post.setDescription(row.get(3).toString());
-//            } catch (Exception ignored) {
-//                post.setDescription("");
-//            }
-//            posts.add(post);
-//        }
-//        try {
-//            postService.saveBatch(posts);
-//        } catch (Exception e) {
-//            throw new ServiceException(Constants.CODE_600, "导入失败，部门编号或部门名称重复。");
-//        }
-//        return Result.success(true);
-//    }
+    @Transactional
+    @PostMapping("/import")
+    public Result imp(@RequestParam MultipartFile file) throws IOException {
+        InputStream inputStream = file.getInputStream();
+        ExcelReader reader = ExcelUtil.getReader(inputStream);
+        // 方式1：(推荐) 通过 javabean的方式读取Excel内的对象，但是要求表头必须是英文，跟javabean的属性要对应起来
+//        List<User> list = reader.readAll(User.class);
+
+        // 方式2：忽略表头的中文，直接读取表的内容
+        List<List<Object>> list = reader.read(5);
+        List<Salary> salaries = CollUtil.newArrayList();
+        for (List<Object> row : list) {
+            Salary salary = new Salary();
+
+            String payDate = "";
+            try {
+                payDate = row.get(0).toString();
+
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，发放工资日期不能为空");
+            }
+            String payDateReg = "\\d{4}-((0([1-9]))|(1(0|1|2)))$";
+            if (!payDate.matches(payDateReg)) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，发放工资日期格式有误");
+            }
+            salary.setPayDate(payDate);
+
+
+            String empno = null;
+            try {
+                empno = row.get(1).toString();
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，员工编号不能为空。");
+            }
+            if (!(empno.length() >= 3 && empno.length() <= 18)) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，员工编号长度在3到18个字符。");
+            }
+            Employee byId = employeeService.getById(empno);
+            if (byId == null) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，员工编号不存在。");
+            }
+            salary.setEmpno(empno);
+
+            Float base = null;
+            Float performance = null;
+            Float bonus = null;
+            Float subsidy = null;
+            Float insurance = null;
+            Float penalty = null;
+            Float absenteeism = null;
+            try {
+                base = Float.parseFloat(row.get(2).toString());
+                performance = Float.parseFloat(row.get(3).toString());
+                bonus = Float.parseFloat(row.get(4).toString());
+                subsidy = Float.parseFloat(row.get(5).toString());
+                insurance = Float.parseFloat(row.get(6).toString());
+                penalty = Float.parseFloat(row.get(7).toString());
+                absenteeism = Float.parseFloat(row.get(8).toString());
+            } catch (Exception e) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，金额格式不能为空");
+            }
+            String moneyReg = "(([1-9]{1}\\d*)|(0{1}))(\\.\\d{1,2})?$";
+            if (!base.toString().matches(moneyReg) || !performance.toString().matches(moneyReg) || !bonus.toString().matches(moneyReg) || !subsidy.toString().matches(moneyReg)
+                    || !insurance.toString().matches(moneyReg) || !penalty.toString().matches(moneyReg) || !absenteeism.toString().matches(moneyReg)) {
+                throw new ServiceException(Constants.CODE_600, "导入失败，金额格式输入有误");
+            }
+            salary.setBase(base);
+            salary.setPerformance(performance);
+            salary.setBonus(bonus);
+            salary.setSubsidy(subsidy);
+            salary.setInsurance(insurance);
+            salary.setPenalty(penalty);
+            salary.setAbsenteeism(absenteeism);
+            salary.setFsalary(base + performance + bonus + subsidy + insurance + penalty + absenteeism);
+
+            try {
+                salary.setRemark(row.get(9).toString());
+            } catch (Exception ignored) {
+                salary.setRemark("");
+            }
+            salaries.add(salary);
+        }
+        try {
+            salaryService.saveBatch(salaries);
+        } catch (Exception e) {
+            throw new ServiceException(Constants.CODE_500, "导入失败，系统错误。");
+        }
+        return Result.success(true);
+    }
 }
 
