@@ -34,16 +34,16 @@
             and e.postno = p.postno
             and s.empno = e.empno
             <if test="payDate != null and payDate != ''">
-                and s.pay_date like #{payDate}
+                and s.pay_date = #{payDate}
             </if>
             <if test="roleId != null and roleId != ''">
-                and e.role_id like #{roleId}
+                and e.role_id = #{roleId}
             </if>
             <if test="deptno != null and deptno != ''">
-                and e.deptno like #{deptno}
+                and e.deptno = #{deptno}
             </if>
             <if test="postno != null and postno != ''">
-                and e.postno like #{postno}
+                and e.postno = #{postno}
             </if>
             <if test="search != null and search != ''">
                 and e.name like #{search}
@@ -68,16 +68,16 @@
             and e.postno = p.postno
             and s.empno = e.empno
             <if test="payDate != null and payDate != ''">
-                and s.pay_date like #{payDate}
+                and s.pay_date = #{payDate}
             </if>
             <if test="roleId != null and roleId != ''">
-                and e.role_id like #{roleId}
+                and e.role_id = #{roleId}
             </if>
             <if test="deptno != null and deptno != ''">
-                and e.deptno like #{deptno}
+                and e.deptno = #{deptno}
             </if>
             <if test="postno != null and postno != ''">
-                and e.postno like #{postno}
+                and e.postno = #{postno}
             </if>
             <if test="search != null and search != ''">
                 and e.name like #{search}

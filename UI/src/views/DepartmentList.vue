@@ -21,7 +21,7 @@
                         导出<i class="el-icon-arrow-down el-icon--right"></i>
                     </el-button>
                     <el-dropdown-menu slot="dropdown" style="text-align: center;">
-                        <el-dropdown-item>导出选中</el-dropdown-item>
+                        <el-dropdown-item @click.native="exportByIds">导出选中</el-dropdown-item>
                         <el-dropdown-item @click.native="exp">导出所有</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -304,6 +304,16 @@ export default {
         exp() {
             window.open("http://localhost:9090/department/export");
         },
+        // exportByIds() {
+        //     let ids = this.multipleSelection.map(v => v.deptno);
+        //     // window.open("http://localhost:9090/department/export/" + ids);
+        //     this.request.get("/department/export", {
+        //         "ids": ids,
+        //         "response": ""
+        //     }).then(res => {
+        //         console.log(res);
+        //     });
+        // },
         //导出导入的数据
         exptemp() {
             window.open("http://localhost:9090/department/exporttemp");

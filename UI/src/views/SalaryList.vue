@@ -552,8 +552,9 @@ export default {
             return date[0] + '-' + date[1] + '-' + date[2] + ' ' + date[3] + ':' + date[4] + ':' + date[5];
         },
         showAddDialog() {
-            this.request.get("/employee/allnameinfo", "").then(res => {
+            this.request.get("/employee/allnameinfo/" + "").then(res => {
                 this.employeeOptions = res.data;
+                console.log(res);
             });
             this.addDialogVisible = true;
         },
@@ -655,10 +656,8 @@ export default {
                     this.$set(this.editForm, "roleName", res.data[0].roleName);
                     this.$set(this.editForm, "deptName", res.data[0].deptName);
                     this.$set(this.editForm, "postName", res.data[0].postName);
-                    console.log(res.data);
                 });
                 this.editDialogVisible = true;// 开启编辑窗口
-                console.log(this.editForm);
             });
         },
         // 关闭编辑对话框

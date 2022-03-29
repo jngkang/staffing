@@ -125,7 +125,7 @@ public class DepartmentController {
     @GetMapping("/export")
     public void export(HttpServletResponse response) throws Exception {
         List<Department> list = null;
-        List<Integer> ids = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         // 从数据库查询出所有的数据
         if (ids.size() == 0) {
             list = departmentService.list();

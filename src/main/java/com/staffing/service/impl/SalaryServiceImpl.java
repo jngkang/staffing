@@ -27,10 +27,6 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
     @Override
     public List<SalaryPageDto> page(Integer pageNum, Integer pageSize, String payTime, String roleId, String deptno, String postno, String search) {
         pageNum = (pageNum - 1) * pageSize;
-        payTime = "%" + payTime + "%";
-        roleId = "%" + roleId + "%";
-        deptno = "%" + deptno + "%";
-        postno = "%" + postno + "%";
         search = "%" + search + "%";
         return salaryMapper.page(pageNum, pageSize, payTime, roleId, deptno, postno, search);
     }
@@ -56,6 +52,7 @@ public class SalaryServiceImpl extends ServiceImpl<SalaryMapper, Salary> impleme
 
     @Override
     public Long count(String payDate, String roleId, String deptno, String postno, String search) {
+        search = "%" + search + "%";
         return salaryMapper.count(payDate, roleId, deptno, postno, search);
     }
 }
