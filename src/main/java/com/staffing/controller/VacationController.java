@@ -1,7 +1,6 @@
 package com.staffing.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.staffing.common.Result;
 import com.staffing.entity.Vacation;
 import com.staffing.service.IVacationService;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -34,6 +34,7 @@ public class VacationController {
      */
     @PostMapping
     public Result save(@RequestBody Vacation vacation) {
+        vacation.setCheckDatetime(LocalDateTime.now());
         return Result.success(vacationService.saveOrUpdate(vacation));
     }
 
@@ -94,27 +95,12 @@ public class VacationController {
     @GetMapping("/page")
     public Result findPage(@RequestParam Integer pageNum,
                            @RequestParam Integer pageSize,
+                           @RequestParam String empno,
                            @RequestParam String roleId,
                            @RequestParam String deptno,
                            @RequestParam String postno,
                            @RequestParam String search) {
-        QueryWrapper<Vacation> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(search)) {
-            queryWrapper.and( // 添加括号，并且以and连接
-                    QueryWrapper -> QueryWrapper.like("empno", search)
-                            .or().like("name", search)
-            );
-        }
-        if (!"".equals(roleId)) {
-            queryWrapper.like("role_id", roleId);
-        }
-        if (!"".equals(deptno)) {
-            queryWrapper.like("deptno", deptno);
-        }
-        if (!"".equals(postno)) {
-            queryWrapper.like("postno", postno);
-        }
-        return Result.success(vacationService.page(pageNum, pageSize, roleId, deptno, postno, search));
+        return Result.success(vacationService.page(pageNum, pageSize, empno, roleId, deptno, postno, search));
     }
 }
 

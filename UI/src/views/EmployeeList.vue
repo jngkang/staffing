@@ -271,8 +271,8 @@
                     </el-form-item>
                     <el-form-item label="性别" prop="sex">
                         <el-radio-group v-model="editForm.sex">
-                            <el-radio :label="1" style="margin-left: 30px">男</el-radio>
-                            <el-radio :label="0">女</el-radio>
+                            <el-radio :label="true" value="1" style="margin-left: 30px">男</el-radio>
+                            <el-radio :label="false" value="0">女</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="民族" prop="nation">
@@ -659,6 +659,7 @@ export default {
             this.reset();
             this.request.get("/employee/" + id).then(res => {
                 this.editForm = res.data;// 查询出员工信息，并反填回编辑表单中
+                console.log(res.data);
                 // 在打开编辑窗口时，根据查询到员工信息中的部门编号查询出该部门所有的岗位信息
                 this.deptSelectChange(res.data.deptno);
                 this.editForm.postno = res.data.postno;

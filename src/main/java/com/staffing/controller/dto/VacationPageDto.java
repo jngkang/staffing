@@ -45,6 +45,7 @@ public class VacationPageDto {
 
     @ApiModelProperty("员工编号")
     private String checkEmpno;
+    private String checkEmpName;
 
     @ApiModelProperty("审核日期")
     private LocalDateTime checkDatetime;

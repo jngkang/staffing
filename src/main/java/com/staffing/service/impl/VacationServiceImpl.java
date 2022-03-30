@@ -29,10 +29,10 @@ public class VacationServiceImpl extends ServiceImpl<VacationMapper, Vacation> i
     }
 
     @Override
-    public List<VacationPageDto> page(Integer pageNum, Integer pageSize, String roleId, String deptno, String postno, String search) {
+    public List<VacationPageDto> page(Integer pageNum, Integer pageSize, String empno, String roleId, String deptno, String postno, String search) {
         pageNum = (pageNum - 1) * pageSize;
         search = "%" + search + "%";
-        return vacationMapper.page(pageNum, pageSize, roleId, deptno, postno, search);
+        return vacationMapper.page(pageNum, pageSize, empno, roleId, deptno, postno, search);
     }
 
     @Override

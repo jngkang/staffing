@@ -554,7 +554,6 @@ export default {
         showAddDialog() {
             this.request.get("/employee/allnameinfo/" + "").then(res => {
                 this.employeeOptions = res.data;
-                console.log(res);
             });
             this.addDialogVisible = true;
         },

@@ -112,7 +112,7 @@ export default {
         this.menus = window.localStorage.getItem("menus") ? JSON.parse(window.localStorage.getItem("menus")) : {};
 
         // 设置所有菜单展开
-        this.opens = this.user.menus.map(v => '' + v.menuId);
+        // this.opens = this.user.menus.map(v => '' + v.menuId);
     },
     computed: {
         currentPathName() {

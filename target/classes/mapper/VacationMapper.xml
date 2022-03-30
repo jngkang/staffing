@@ -18,6 +18,7 @@
         v.input_datetime input_datetime,
         v.state state,
         v.check_empno check_empno,
+        (select name from employee where empno = v.check_empno) check_empName,
         v.check_datetime check_datetime
         from employee e,
         sys_role r,
@@ -28,6 +29,9 @@
         and e.deptno = d.deptno
         and e.postno = p.postno
         and v.empno = e.empno
+        <if test="empno != null and empno != ''">
+            and e.empno = #{empno}
+        </if>
         <if test="roleId != null and roleId != ''">
             and e.role_id = #{roleId}
         </if>
@@ -38,7 +42,7 @@
             and e.postno = #{postno}
         </if>
         <if test="search != null and search != ''">
-            and e.name like #{search} and e.empno like #{search}
+            and (e.name like #{search} or e.empno like #{search})
         </if>
         limit #{pageNum}, #{pageSize}
     </select>
@@ -63,7 +67,7 @@
             and e.postno = #{postno}
         </if>
         <if test="search != null and search != ''">
-            and e.name like #{search} and e.empno like #{search}
+            and (e.name like #{search} or e.empno like #{search})
         </if>
     </select>
 </mapper>
