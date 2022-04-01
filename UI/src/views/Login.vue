@@ -68,6 +68,7 @@ export default {
                     if (res.code === '200') {
                         this.$message.success("登录成功");// 信息提示
                         window.localStorage.setItem("user", JSON.stringify(res.data));
+                        console.log(res.data.menus);
                         window.localStorage.setItem("menus", JSON.stringify(res.data.menus))  // 存储用户信息到浏览器
 
                         // 动态设置当前用户的路由
