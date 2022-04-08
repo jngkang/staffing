@@ -23,6 +23,7 @@ server:
     #修改端口号
     port: 9090
 
-files:
-    upload:
-        path: D:\Code\GraduationProject\files\
+#files:
+#    upload:
+#        path: \files\
+#        path: D:\Code\GraduationProject\files\

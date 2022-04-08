@@ -11,8 +11,14 @@ import com.staffing.common.Result;
 import com.staffing.entity.Files;
 import com.staffing.mapper.FilesMapper;
 import com.staffing.service.IFilesService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -32,8 +38,7 @@ import java.util.List;
 @RequestMapping("/files")
 public class FilesController {
 
-    @Value("${files.upload.path}")
-    private String filesUploadPath;
+    private final String filesUploadPath = System.getProperty("user.dir") + "\\files\\";
 
     @Resource
     private FilesMapper fileMapper;
